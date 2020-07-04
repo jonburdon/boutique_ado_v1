@@ -1,8 +1,18 @@
-<img src="https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png" style="margin: 0;">
 
-Welcome USER_NAME,
+# Ado Boutique Project
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. You can safely delete this README.md file, or change it for your own project.
+
+
+## Developer Aims
+1. Develop a fully functioning django ecommerce store
+2. Provide sufficient documentation through readme.md and comments in code to act as a base for future projects.
+
+
+## Setup
+
+Go to https://github.com/code-institute-org/gitpod-full-template and click Use This Template, then open in Gitpod.
+
+
 
 ## Gitpod Reminders
 
