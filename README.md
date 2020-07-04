@@ -196,8 +196,81 @@ The following will also be needed:
     {% endblock %}
 
 ```
+In terminal:
+`python3 manage.py startapp home`
+`mkdir -p home/templates/home`
+
+Create index.html within this new directory
 
 
+```
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1 class="display-4 text-success">Check Bootstrap is working.</h1>
+{% endblock%}
+```
+
+To render the template go to views.py:
+
+```
+def index(request):
+    """  A view to return the index page. """
+    return render(request, 'home/index.html')
+
+```
+
+Copy the contents of project level urls.py to a new urls.py file in home folder.
+
+Remove docstring from top.
+Remove include as this is not needed.
+Add one empty path to indicate this it teh route url and render views.index with url home.
+Import views from current directory.
+
+It might look like this:
+
+```
+
+from django.contrib import admin
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name="home"),
+]
+
+
+```
+
+PROJECT LEVEL urls.py file will need:
+```
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    path('', include('home.urls')),
+]
+
+
+```
+
+
+
+Add home to installed apps in settings.py
+
+Add template directories in settings.py eg:
+
+```
+        'DIRS': [
+                os.path.join(BASE_DIR, 'templates'),
+                os.path.join(BASE_DIR, 'templates', 'allauth'),
+
+        ],
+
+```
+
+
+Now `python3 manage.py runserver`
 
 ## Gitpod Reminders
 
