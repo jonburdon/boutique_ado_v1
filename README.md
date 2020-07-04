@@ -31,6 +31,115 @@ Check it runs. Thens stop.
 
 `python3 manage.py createsuperuser`
 
+## Use Allauth to set up user account creation and authentication
+
+`pip3 install django-allauth`
+
+Documentation is here:
+https://django-allauth.readthedocs.io/en/latest/installation.html
+
+
+Add the following to settings.py:
+
+Check request context_processors exists in settings.py
+
+This allows allauth to access the http request object in our templates.
+
+```
+AUTHENTICATION_BACKENDS = [
+
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+]
+```
+Allow users to log in with their email address.
+
+
+Add these to installed apps:
+
+```
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+```
+All user account registration etc. Allow logging in via facebook and google etc.
+
+Under authentication backends add:
+
+`SITE_ID = 1`
+
+In urls.py:
+
+add to urls list:
+`    path('accounts', include('allauth.urls')),`
+
+Add include here:
+`from django.urls import path, include`
+
+
+In terminal:
+`python3 manage.py migrate` as new apps have been added.
+
+`python3 manage.py runserver` 
+
+Go to project url/admin:
+
+Log in.
+
+In sites, change domain name to eg. boutiqueado.example.com and Display Name.
+NB:
+This would be critical for social media authentication.
+
+Log out of admin at stop dev server.
+
+In urls.py
+
+Add a / after accounts to ensure in the allauth urls are generated properly.
+
+In settings.py we need to be able to access the email addresses as they are logged.
+
+`EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'`
+
+Add to settings.py:
+
+```
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_VERIFICATION_REQUIRED = 'mandatory'
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/success'
+```
+
+`python3 manage.py runserver`
+
+Check that /accounts/login url is working.
+
+
+
+in /admin/ May need to log in and add email address, and make verified and primary to convince allauth this is verified and primary.
+
+
+At this point as long as the /success url is seen when logging in, we know allauth is working and can remove 'success' from the end of the url in settings.py `LOGIN_REDIRECT_URL = '/'`
+
+
+In terminal:
+`pip3 freeze > requirements.txt`
+
+
+`mkdir templates`
+`mkdir templates/allauth`
+
+
+
+
 
 
 ## Gitpod Reminders
@@ -38,6 +147,7 @@ Check it runs. Thens stop.
 To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
 
 `python3 -m http.server`
+
 
 
 A blue button should appear to click: *Make Public*,
