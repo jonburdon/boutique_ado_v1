@@ -12,6 +12,25 @@
 
 Go to https://github.com/code-institute-org/gitpod-full-template and click Use This Template, then open in Gitpod.
 
+* pip3 install django
+* django-admin startproject boutique_ado .
+* touch .gitignore
+
+In .gitignore:
+```
+*.sqlite3
+*.pyc
+__pycache__
+```
+
+`python3 manage.py runserver`
+
+Check it runs. Thens stop.
+
+`python3 manage.py migrate`
+
+`python3 manage.py createsuperuser`
+
 
 
 ## Gitpod Reminders
@@ -19,6 +38,7 @@ Go to https://github.com/code-institute-org/gitpod-full-template and click Use T
 To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
 
 `python3 -m http.server`
+
 
 A blue button should appear to click: *Make Public*,
 
