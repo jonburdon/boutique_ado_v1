@@ -169,6 +169,33 @@ At top of base.html:
 `{% load static %}`
 
 
+* Wrap meta, core css and corejs in {% block %} tags so it can be included or replaced later if necessary.
+* Add `{% block extra_meta %}` extra css and extra js blocks so they can also be included or replaced later.
+* Add `{% block extra_title %}{% endblock %}` within title tags so this can be added per page later.
+
+
+Add some useful body content, to be finished later:
+```
+    <header class="container-fluid fixed-top"></header>
+    {% if messages %}
+    <div class="message-container"></div>
+    {% endif %}
+
+```
+
+The following will also be needed:
+
+```
+{% block pageheader %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block postloadjs %}
+    {% endblock %}
+
+```
 
 
 
