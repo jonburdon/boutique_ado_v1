@@ -138,6 +138,36 @@ In terminal:
 `mkdir templates/allauth`
 
 
+## Customising allauth templates and installing a Bootstrap Template
+
+TIP:
+When typing python press tab and it will finish typing the currently used version.
+
+Copy the allauth templates to our templates folder:
+
+`cp -r ../.pip-modules/lib/python3.8/site-packages/allauth/templates/* ./templates/allauth`
+
+Openid and test folders will probably not be needed - so could be deleted.
+
+In our main templates folder, create base.html
+
+
+Boostrap starter template:
+https://getbootstrap.com/docs/4.3/getting-started/introduction/
+
+
+Paste into base.html
+
+Add the following:
+
+To avoid validation errors later:
+`<meta http-equiv="X-UA-Compatible" content="ie=edge">`
+
+Clean up comments, move scripts to head section.
+
+At top of base.html:
+`{% load static %}`
+
 
 
 
