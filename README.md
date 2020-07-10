@@ -272,6 +272,36 @@ Add template directories in settings.py eg:
 
 Now `python3 manage.py runserver`
 
+
+
+## Build Homepage
+
+Build basic Bootstrap grid inside home/index.html. Container, Row, Column.
+Use h-100 on container and row then my-auto to create vertical centring.
+
+Use Bootstrap helper classes to create content:
+
+```
+    <div class="container h-100">
+        <div class="row h-100" >
+            <div class="col-7 col-md-6 my-auto">
+                <h1 class="display-4 logo-font text-black">
+                    The new collections are here.
+                </h1>
+                <div>
+                    <h4>
+                       <a href="" class="shop-now button btn btn-lg rounded-0 text-uppercase py-3">
+                       Shop Now
+                       </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+```
+
+Add page header block.
+
 ## Gitpod Reminders
 
 To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
