@@ -300,7 +300,20 @@ Use Bootstrap helper classes to create content:
     </div>
 ```
 
-Add page header block.
+Add page header block in home index.html.
+
+Add content to base.html header:
+
+```
+   <header class="container-fluid fixed-top">
+        <div class="row">
+            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left"></div>
+            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0"></div>
+           <div class="col-12 col-lg-4 my-auto py-1 py-lg-0"></div>
+        </div>
+    </header>
+```
+
 
 ## Gitpod Reminders
 
