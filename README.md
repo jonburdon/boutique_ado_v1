@@ -728,6 +728,13 @@ Note: Product variable from product view is used in this template: {{ products }
 ```
 
 
+Paste in code from here if needed:
+https://github.com/ckz8780/boutique_ado_v1/tree/e3c29afef63a8e5a8dae3fdc6b1277eb32206dbc
+
+Note: if statements are used: if forloop.container|divisibleby:2 to only display hr if the column display is 12,6,3,4 etc.
+
+
+
 
 
 
