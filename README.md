@@ -881,7 +881,39 @@ NOTE:
 Q handles the search request so that the search request could be in the product name OR in the description etc.
 See django documentation: https://docs.djangoproject.com/en/3.0/topics/db/queries/
 
+## Add Category Filter:
 
+Add category parameter to url links in main_nav.html:
+```
+<a href="{% url 'products' %}?category=activewear,essentials" class="dropdown-item">Activewear &amp; Essentials</a>
+                <a href="{% url 'products' %}?category=jeans" class="dropdown-item">Jeans</a>
+                <a href="{% url 'products' %}?category=shirts" class="dropdown-item">Shirts</a>
+                <a href="{% url 'products' %}?category=activewear,essentials,jeans,shirts" class="dropdown-item">All Clothing</a>
+ 
+```
+
+In products -> views.py
+
+`from .models import Product, Category`
+
+```
+    products = Product.objects.all()
+    query = None
+    categories = None
+```
+
+```
+    if request.GET:
+
+        if 'category' in request.GET:
+            categories = request.GET[]'category'].split(',')
+            # We can look for the name field in the category model using __ because they are related with a foreign key
+            products = products.filter(category__name__in=categories)
+            # Capture categories so the currently selected categories can be displayed
+            categories = Category.objects.filter(name__in=categories)
+```
+
+Use idencial syntac for Homewear and Special Offers nav.
 
 
 ## Useful Documentation:
