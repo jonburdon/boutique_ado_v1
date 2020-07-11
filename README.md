@@ -833,6 +833,54 @@ Bugfix: Pad the top on mobile view when navbar is collapsed. This displays body 
 ```
 
 
+## Queries and Categories
+
+Search function:
+
+Change Action in search form on base.html: `<form method="GET" action="{% url 'products' %}">`
+
+And in mobile version of the header: `<form class="form" method="GET" action="{% url 'products' %}">`
+
+
+In  products -> Views.py:
+
+This checks if get is in the url and then creates the query variable if present.
+
+```
+    products = Product.objects.all()
+    query = None
+
+    if request.GET:
+        if 'q' in request.GET:
+            query = request.GET['q']
+            if not query:
+                messages.error(request, "You didn't enter any search criteria!")
+                return redirect(reverse('products'))
+            # Search query will check product name AND product description. The Pipe | is the OR statement and the i makes this insensitive
+            queries = Q(name__icontains=query) | Q(description__icontains=query)
+            # pass this query to the filter method to filter products
+            products = products.filter(queries)
+
+    context = {
+        'products': products,
+        'search_term': query,
+    }
+
+
+```
+
+The following will be needed for this to work:
+```
+from django.contrib import messages
+from django.db.models import Q
+```
+
+`from django.shortcuts import render, redirect, reverse, get_object_or_404`
+
+NOTE:
+Q handles the search request so that the search request could be in the product name OR in the description etc.
+See django documentation: https://docs.djangoproject.com/en/3.0/topics/db/queries/
+
 
 
 
