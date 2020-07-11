@@ -655,6 +655,80 @@ admin.site.register(Category, CategoryAdmin)
 
 ```
 
+## View Set Up for products:
+
+Copy basic view from Home View and alter:
+
+```
+from django.shortcuts import render
+from .models import Product
+
+# Create your views here.
+
+def all_products(request):
+    """  A view to show, sort and search products. """
+
+    products = Product.objects.all()
+
+    context = {
+        'products': products,
+    }
+
+    return render(request, 'products/products.html', context)
+```
+
+Copy home urls file and use as basis for products urls.py (need to create this)
+
+```
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.all_products, name="products"),
+]
+
+```
+
+Include this in global file:
+`    path('products/', include('products.urls')),`
+
+`mkdir -p products/templates/products`
+
+Create products.html in this directory. Copy home template in as a shell.
+
+Note: Product variable from product view is used in this template: {{ products }}
+
+```
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+            
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+        <div class="row" >
+            <div class="col">
+                {{ products }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+```
+
+
+
 
 
 
