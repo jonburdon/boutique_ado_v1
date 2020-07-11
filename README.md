@@ -532,3 +532,90 @@ Add bg-black class to base.css
             </div>
  </div>
 ```
+
+## Products append
+
+Uploaded product images to media folder.
+
+To initiate:
+`python3 manage.py startapp products`
+
+Add in settings.py
+
+Uploaded json fixture files to products/fixtures.
+
+In products -> models.py:
+
+```
+class Category(models.model):
+    name = models.Charfield(max_length=254)
+    friendly_name = models.Charfield(max_length=254, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+    
+    def get_friendly_name(self):
+        return self.friendly_name
+```
+
+Note: null=true and blank=true make friendlyname optional.
+
+Note: field types can be looked up here: https://docs.djangoproject.com/en/3.0/ref/models/fields/
+
+
+Products model:
+
+```
+class Product(models.model):
+    category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
+    sku = models.CharField(max_length=254, null=True, blank=True)
+    name = models.CharField(max_length=254)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    rating = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    image_url = models.URLField(max_length=1024, null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+```
+
+Note: In the foreign key field, on_delete is set to SET_NULL so that the product will not be deleted if the category is deleted.
+Note: Name, Description, Price are required, everything else is optional.
+Note: field names such as CharField are case sensitive.
+
+`python3 manage.py makemigrations --dry-run`
+
+`pip3 install pillow`
+
+Look good now.
+
+`python3 manage.py makemigrations`
+
+`python3 manage.py migrate --plan` to check there are no issues with the new models.
+
+`python3 manage.py migrate`
+
+Note: If not using the plan flag, specify which model you are migrating to avoid making unintentional changes to other models.
+
+In products -> admin.py:
+
+```
+from django.contrib import admin
+from .models import Product, Category
+
+# Register your models here.
+admin.site.register(Product)
+admin.site.register(Category)
+
+```
+
+
+## Useful Documentation:
+Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
+
+
+
+
+
