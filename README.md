@@ -733,9 +733,104 @@ https://github.com/ckz8780/boutique_ado_v1/tree/e3c29afef63a8e5a8dae3fdc6b1277eb
 
 Note: if statements are used: if forloop.container|divisibleby:2 to only display hr if the column display is 12,6,3,4 etc.
 
+```
+<!-- Add an hr after every row (depending on screen size) -->
+
+                        <div class="col-12 d-sm-none mb-5">
+                        <hr>
+                        </div>
+                        <!-- Only show this if the loop counter is divisible by 2 ie this would be a col-6 -->
+                        {% if forloop.counter|divisibleby:2 %}
+                        <div class="col-12 d-none d-sm-block d-md-block d-lg-none mb-5">
+                        <hr>
+                        </div>
+                        {% endif %}
+
+                        <!-- Only show this if the loop counter is divisible by 3 ie this would be a col-4 -->
+                        {% if forloop.counter|divisibleby:3 %}
+                        <div class="col-12 d-none d-lg-block d-xl-none mb-5">
+                        <hr>
+                        </div>
+                        {% endif %}
+
+                        <!-- Only show this if the loop counter is divisible by 4 ie this would be a col-4 -->
+                        {% if forloop.counter|divisibleby:4 %}
+                        <div class="col-12 d-none d-xl-block mb-5">
+                        <hr>
+                        </div>
+                        {% endif %}
+```
+
+Add products url to main nav:
+`<a href="{% url 'products' %}" class="dropdown-item">All Products</a>`
+
+and in index.html Shop Now button:
+
+`<a href="{% url 'products' %}" class="shop-now button btn btn-lg rounded-0 text-uppercase py-3">
+                       Shop Now
+                       </a>`
+
+## Single Product View
+
+This needs to take the product id as a parameter and then display the product.
+
+Update views in products app:
+
+```
+from django.shortcuts import render, get_object_or_404
+from .models import Product
+
+# Create your views here.
+
+def all_products(request):
+    """  A view to show, sort and search queries. """
+
+    products = Product.objects.all()
+
+    context = {
+        'products': products,
+    }
+
+    return render(request, 'products/products.html', context)
 
 
+def product_detail(request, product_id):
+    """  A view to show single product view. """
 
+    product = get_object_or_404(Product, pk=product_id)
+
+    context = {
+        'product': product,
+    }
+
+    return render(request, 'products/product_detail.html', context)
+```
+
+Update urls.py in products.
+`path('<product_id>', views.product_detail, name="product_detail"),`
+
+Duplicate and rename products.html as product_detail.html
+
+Add layout for product detail.
+
+Add links to product detail page in products.html: `<a href="{% url 'product_detail' product.id %}">`
+Note: In the product page we are working with a django object so djando.id is needed.
+
+
+Bugfix: Pad the top on mobile view when navbar is collapsed. This displays body at 100% of the viewport but minus the height of the header.
+
+```
+@media (max-width: 991px) {
+    .header-container {
+        padding-top: 116px;
+    }
+
+    body {
+        height: calc(100vh - 116px);
+    }
+
+}
+```
 
 
 
