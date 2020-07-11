@@ -611,6 +611,54 @@ admin.site.register(Category)
 
 ```
 
+`python3 manage.py loaddata categories` Will load data from fixtures to the database. Start with categories as products have a foreign key dependent on this.
+
+`python3 manage.py loaddata products`
+
+## Changes to Admin panel
+
+Change plural of Category from Categorys to Categories
+In models.py:
+```
+    class Meta:
+        verbose_name_plural='Categories'
+```
+
+In admin.py, add columns in the admin panel:
+
+```
+# Register your models here.
+
+class ProductAdmin(admin.ModelAdmin):
+# Display order in admin panel
+# These could be in any order and the display order would change
+# Make sure new classes are registered below.
+    list_display = (
+        'sku',
+        'name',
+        'category',
+        'price',
+        'rating',
+        'image',
+    )
+#sort by sku. This is a tuple because multiple sorts could be added eg 'category', 'name'. To reverse it, put a minus in front of sku.
+    ordering = ('sku',)
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'friendly_name',
+    )
+
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Category, CategoryAdmin)
+
+```
+
+
+
+
+
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
