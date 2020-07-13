@@ -143,5 +143,46 @@
         </div>
 
     </div>
+    <div class="btt-button shadow-sm rounded-0 border border-black">
+        <a class="btt-link d-flex h-100">
+            <i class="fas fa-arrow-up text-black mx-auto my-auto"></i>
+        </a>	
+    </div>
+{% endblock %}
 
+<!-- Knowing search parameters could be split in to term and direction, use js to add functionality to select field.-->
+{% block postloadjs %}
+    {{ block.super }} <!-- Append to anything in the block, rather than replacing it -->
+
+    <!-- Scroll to top of page when btt-link is clicked -->
+    <script type="text/javascript">
+		$('.btt-link').click(function(e) {
+			window.scrollTo(0,0)
+		})
+	</script>
+    
+    <script type="text/javascript">
+        // Use url object to replace current get parameters
+        $('#sort-selector').change(function() {
+            var selector = $(this);
+            var currentUrl = new URL(window.location);
+        // Use selected value in select field
+            var selectedVal = selector.val();
+            if(selectedVal != "reset"){
+                // split in to sort and direction
+                var sort = selectedVal.split("_")[0];
+                var direction = selectedVal.split("_")[1];
+                // Create new url variable 
+                currentUrl.searchParams.set("sort", sort);
+                currentUrl.searchParams.set("direction", direction);
+                // Replace location with the term selected.
+                window.location.replace(currentUrl);
+            } else {
+                currentUrl.searchParams.delete("sort");
+                currentUrl.searchParams.delete("direction");
+
+                window.location.replace(currentUrl);
+            }
+        })
+    </script>
 {% endblock %}

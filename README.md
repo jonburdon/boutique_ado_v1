@@ -1033,6 +1033,11 @@ Add to views.py:
                 sorkey = 'category__name'
 ```
 
+Add js to bottom of products.html to operate the select field. Do this by splitting the current search term in to sort and direction and then replacing the url in the window.
+
+Import Lower in views.py
+
+Add back to top button to bottom of products.html and add js and css for this.
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
