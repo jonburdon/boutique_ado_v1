@@ -913,7 +913,59 @@ In products -> views.py
             categories = Category.objects.filter(name__in=categories)
 ```
 
-Use idencial syntac for Homewear and Special Offers nav.
+Use idencial syntax for Homewear and Special Offers nav.
+
+
+## Sorting Products
+
+Add url links get parameters to main-nav.html with sort and direction:
+
+```
+            <div class="dropdown-menu border-0" aria-labelledby="all-products-link">
+                <a href="{% url 'products' %}?sort=price&direction=asc" class="dropdown-item">By Price</a>
+                <a href="{% url 'products' %}?sort=rating&direction=desc" class="dropdown-item ">By Rating</a>
+                <a href="{% url 'products' %}?sort=category&direction=asc" class="dropdown-item ">By Category</a>
+                <a href="{% url 'products' %}" class="dropdown-item">All Products</a>
+            </div>
+```
+
+Add code to handle get parameters in products/views.py
+
+```
+    sort = None
+    direction = None
+
+    if request.GET:
+
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort']
+            sort = sortkey
+            # set up variables for case insentive searching
+            if sortkey == 'name'
+                sortkey = 'lower_name'
+                products = products.annotate(lower_name=Lower('name'))
+                # Now we have lower name in the sortkey variable, but we have preserved the sort term in the variable 'sort'
+
+            if 'direction' in request.GET:
+                # if direction is descending, add a - in from of the sortkey using string formatting which will reverse the order
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}'
+            order the products using the sortkey
+            # implement the search using the oderby model method
+            products = products.order_by(sortkey)
+
+# Current sorting will be None_None if no sorting has happened.
+current_sorting = f'{sort}_{direction}'
+
+
+ context = {
+        'products': products,
+        'search_term': query,
+        'current_categories': categories,
+        'current_sorting': current_sorting,
+    }
+```
+
 
 
 ## Useful Documentation:

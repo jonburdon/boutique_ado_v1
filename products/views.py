@@ -11,8 +11,28 @@ def all_products(request):
     products = Product.objects.all()
     query = None
     categories = None
+    sort = None
+    direction = None
 
     if request.GET:
+
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort']
+            sort = sortkey
+            # set up variables for case insentive searching
+            if sortkey == 'name':
+                sortkey = 'lower_name'
+                products = products.annotate(lower_name=Lower('name'))
+                # Now we have lower name in the sortkey variable, but we have preserved the sort term in the variable 'sort'
+
+            if 'direction' in request.GET:
+                direction = request.GET['direction']
+                # if direction is descending, add a - in from of the sortkey using string formatting which will reverse the order
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}'
+            # order the products using the sortkey
+            # implement the search using the oderby model method
+            products = products.order_by(sortkey)
 
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
@@ -32,10 +52,15 @@ def all_products(request):
             # pass this query to the filter method to filter products
             products = products.filter(queries)
 
+
+# Current sorting will be None_None if no sorting has happened.
+    current_sorting = f'{sort}_{direction}'
+
     context = {
         'products': products,
         'search_term': query,
         'current_categories': categories,
+        'current_sorting': current_sorting,
     }
 
     return render(request, 'products/products.html', context)
