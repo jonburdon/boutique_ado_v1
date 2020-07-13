@@ -25,6 +25,10 @@ def all_products(request):
                 products = products.annotate(lower_name=Lower('name'))
                 # Now we have lower name in the sortkey variable, but we have preserved the sort term in the variable 'sort'
 
+            # Use RELATIONS. Use double underscore syntax to allow connection to RELATED category
+            if sortkey == 'category':
+                sorkey = 'category__name'
+
             if 'direction' in request.GET:
                 direction = request.GET['direction']
                 # if direction is descending, add a - in from of the sortkey using string formatting which will reverse the order
