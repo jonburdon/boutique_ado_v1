@@ -1039,6 +1039,47 @@ Import Lower in views.py
 
 Add back to top button to bottom of products.html and add js and css for this.
 
+
+## Shopping Basket Setup
+
+Create a new app called bag:
+
+`python3 manage.py startapp bag`
+
+Add this to list of installed apps in settings.py
+
+Set up the view to render the template in bag -> views.py
+
+```
+def view_bag(request):
+    """  A view to display shopping bag. """
+    return render(request, 'bag/bag.html')from django.shortcuts import render
+
+```
+
+Create templates folder and bag.html
+
+Copy in index.html from the home app.
+
+Copy home urls file and paste into a new urls.py file in the new app.
+
+```
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.view_bag, name="view_bag"),
+]
+
+```
+
+Add reference the new url file in the project level urls file.
+
+Add link to view bag in base.html `<a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link" href="{% url 'view_bag' %}">` and also in mobile-top-header.html
+
+Add layout grid to bag.html with if bag_items conditional to display message if bag is empty.
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
