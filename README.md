@@ -1080,6 +1080,67 @@ Add link to view bag in base.html `<a class="{% if grand_total %}text-info font-
 
 Add layout grid to bag.html with if bag_items conditional to display message if bag is empty.
 
+Create `contexts.py` in the bag app.
+
+
+Define contexts processor to make a dictionary of bag items available to all templates in the application.
+
+```
+def bag_contents(request)
+""" Return a dictionary called contexts which we are about to create """
+""" This is a contexts processor - makes this dictionary available to all templates in the application"""
+    context= {}
+
+    return context
+```
+
+Add this to settings.py:
+Templates -> Options -> context processors:
+` 'bag.contents.bag_contents', `
+Bag contents can now be accessed from any template in the app.
+
+Also add the following variables in settings.py:
+
+```
+FREE_DELIVERY_THRESHOLD = 50
+STANDARD_DELIVERY_PERCENTAGE = 10
+```
+
+Set up basic calculations for shopping cart and make these variables available to all apps using Context:
+
+```
+from decimal import Decimal
+from django.conf import settings
+
+def bag_contents(request):
+# Return a dictionary called contexts which we are about to create 
+# This is a contexts processor - makes this dictionary available to all templates in the application
+    bag_items = []
+    total = 0
+    product_count = 0
+
+    if total < settings.FREE_DELIVERY_THRESHOLD:
+        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
+        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
+    else:
+        delivery = 0
+        free_delivery_delta = 0
+    
+    grand_total = delivery + total
+    
+    context = {
+        'bag_items': bag_items,
+        'total': total,
+        'product_count': product_count,
+        'delivery': delivery,
+        'free_delivery_delta': free_delivery_delta,
+        'free_delivery_threshold': settings.FREE_DELIVERY_THRESHOLD,
+        'grand_total': grand_total,
+    }
+
+    return context
+```
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
