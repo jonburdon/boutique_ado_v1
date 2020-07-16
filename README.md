@@ -1213,6 +1213,30 @@ def add_to_bag(request, item_id):
 
 * This can now be tested - Click add to bag and the quantity added and product id will be visible in console.
 
+## Update context processor to make bag data available across entire application
+
+Access the bag variable stored in the browser session from the Context Processor in bag -> contexts.py
+
+```
+
+    # Using the bag from the session data... update total, product count
+    for item_id, quantity in bag.items():
+        product = get_object_or_404(Product, pk=item_id)
+        total += quantity * product.price
+        product_count += quantity
+        bag_items.append({
+            'item_id': item_id,
+            'quantity': quantity,
+            'product': product,
+        })
+```
+* import the model and get_object_or_404
+
+* Add `{{ bag_items}}` to bag.html just to check this data is displaying.
+
+
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 

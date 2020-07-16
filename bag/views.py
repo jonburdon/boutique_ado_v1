@@ -21,6 +21,5 @@ def add_to_bag(request, item_id):
         bag[item_id] = quantity # add or update
 
     request.session['bag'] = bag # override the variable in the session with the updated version
-    print(request.session['bag'])
     return redirect(redirect_url)
     
