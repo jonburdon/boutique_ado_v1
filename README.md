@@ -1234,7 +1234,10 @@ Access the bag variable stored in the browser session from the Context Processor
 
 * Add `{{ bag_items}}` to bag.html just to check this data is displaying.
 
-
+* Update bag.html with table to display shopping bag data.
+* Use bootstrap scope=col in th elements.
+* Use bootstrap classes such as p-3 w-25 my-0 text-muted to format td elements
+* TIP:
 
 
 ## Useful Documentation:
