@@ -1141,6 +1141,78 @@ def bag_contents(request):
     return context
 ```
 
+## Adding and Handling Products
+
+* In product_detail.html write a form to submit the product to the shopping cart:
+
+
+```
+<form class="form" action="{% url 'add_to_bag' product.id %}" method="POST">
+                        {% csrf_token %} <!-- Use django Cross Site Protect Forgery Protection because we are using post -->
+                        <div class="form-row">
+                            <div class="col-12">
+                                <p class="mt-3"><strong>Quantity:</strong></p>
+                                <div class="form-group w-50">
+                                    <div class="input-group"> <!-- Select how many of this item to purchase -->
+                                        <input class="form-control qty_input" type="number" name="quantity" value="1" min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 mt-5">
+                                    <span class="icon">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="text-uppercase">Keep Shopping</span>
+                                </a>
+                                <input type="submit" class="btn btn-black rounded-0 text-uppercase mt-5" value="Add to Bag">
+                            </div>
+                            <input type="hidden" name="redirect_url" value="{{ request.path }}"> <!-- Submit current url as a hidden field so we can be directed accordingly -->
+                        </div>
+                    </form>
+
+```
+
+* Update base.css with btn-outline-black class
+
+* Define add_to_bag in views.py
+
+```
+from django.shortcuts import render, redirect
+
+# Create your views here.
+
+def view_bag(request):
+    """ A view that renders the bag contents page """
+
+    return render(request, 'bag/bag.html')
+
+def add_to_bag(request, item_id):
+    """ Add a quantity of the specified product to the shopping bag """
+
+    quantity = int(request.POST.get('quantity')) #convert to integer as the template will send this as a string
+    redirect_url = request.POST.get('redirect_url') # Use the redirect variable given in the post data
+    # Store the shopping bag data in the http request session. This will persist until user closes their browser
+    bag = request.session.get('bag', {})
+    
+    if item_id in list(bag.keys()):
+        bag[item_id] += quantity #increment quantity if this item is already in the bag
+    else:
+        bag[item_id] = quantity # add or update
+
+    request.session['bag'] = bag # override the variable in the session with the updated version
+    print(request.session['bag'])
+    return redirect(redirect_url)
+    
+```
+
+* Update url
+
+* Add action to the form to include product id user is adding `<form class="form" action="{% url 'add_to_bag' product.id %}" method="POST">`
+
+* This can now be tested - Click add to bag and the quantity added and product id will be visible in console.
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
