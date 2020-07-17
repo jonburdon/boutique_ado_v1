@@ -1237,7 +1237,74 @@ Access the bag variable stored in the browser session from the Context Processor
 * Update bag.html with table to display shopping bag data.
 * Use bootstrap scope=col in th elements.
 * Use bootstrap classes such as p-3 w-25 my-0 text-muted to format td elements
-* TIP:
+
+## Adding functionality for product variations
+
+* In products -> models.py
+`has_sizes = models.BooleanField(default=False, null=True, blank=True)`
+
+* Note this would not allow for full functionality in a production site eg stock management for each size of each product
+
+* REMEMBER! This is a change to the models, so...
+
+* Dry run the make migrations... `python3 manage.py makemigrations --dry-run`
+
+* Looks ok so `python3 manage.py makemigrations`
+
+* `python3 manage.py migrate --plan`
+
+* `python3 manage.py migrate`
+
+* `python3 manage.py shell`
+
+In shell:
+- from products.models import Product
+- kdbb = ['kitchen_dining', 'bed_bath']   
+- clothes = Product.objects.exclude(category__name__in=kdbb)  
+- clothes.count()
+
+```
+for item in clothes: 
+    item.has_sizes = True 
+   item.save() 
+```
+- Press enter to execute
+- Product.objects.filter(has_sizes=True)  
+
+- exit()
+
+* This shows how shell can be used to manipulate the database programatically from the back end.
+
+* Add size selector to the product_detail.html template
+
+```
+{% with product.has_sizes as s %}
+                            {% if s %}
+                                <div class="col-12">
+                                    <p><strong>Size:</strong></p>
+                                    <select class="form-control rounded-0 w-50" name="product_size" id='id_product_size'>
+                                        <option value="xs">XS</option>
+                                        <option value="s">S</option>
+                                        <option value="m" selected>M</option>
+                                        <option value="l">L</option>
+                                        <option value="xl">XL</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+```
+
+
+* Adjust grid conditionally for the next row `<div class="col{% if s %}-12 mt-2{% endif %}">`
+
+* Add `{% endwith %}` after appropriate point in grid - line 91 in this case.
+
+* Add size to product detail on shopping bag page bag -> bag.html:
+
+`<p class="my-0"><strong>Size: </strong>{% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>`
+
+
+
+
 
 
 ## Useful Documentation:
