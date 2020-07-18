@@ -16,7 +16,7 @@ def add_to_bag(request, item_id):
     # If product size is in the product url, set the variable 'size' to this value
     size = None
     if 'product_size' in request.POST:
-        size = request.POST['size']
+        size = request.POST['product_size']
 
     # Store the shopping bag data in the http request session. This will persist until user closes their browser
     bag = request.session.get('bag', {})
