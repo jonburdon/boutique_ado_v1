@@ -1376,7 +1376,27 @@ if size:
 
 Tip: In Chrome -> Dev Tools -> Applications -> Storage -> Cookies -> Right click and clear the cookie for this session to clear the bag.
 
+Currently there is a KEY ERROR:
 
+Fix: `     size = request.POST['product_size']`
+
+## Updates to Product Detail page to allow for product quantity updating
+
+* update input group to include bootstrap buttons 
+
+* Add js to handle this updating quantities to an include as this will be used elsewhere (create includes directory in the templates/ products folder)
+
+* Create quantity_input_script.html (See comments in the code for functionality)
+
+* include this in the postloadjs block at the bottom of product_detail.html
+
+```
+{% block postloadjs %}
+{{ block.super }}
+{% include 'products/includes/quantity_input_script.html' %}
+{% endblock %}
+
+```
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
