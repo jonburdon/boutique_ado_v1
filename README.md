@@ -1303,7 +1303,78 @@ for item in clothes:
 `<p class="my-0"><strong>Size: </strong>{% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>`
 
 
+In django admin panel, update the few products in clothing that don't have sizes.
 
+
+In bag app, views.py set the product size variable to that posted:
+
+```
+# If product size is in the product url, set the variable 'size' to this value
+    size = None
+    if 'product_size' in request.POST:
+        size = request.POST['size']
+```
+
+Update to store this in a dictionary:
+
+```
+if size:
+        if item_id in list(bag.keys()):
+            if size in bag[item_id]['items_by_size'].keys():
+                bag[item_id]['items_by_size'][size] += quantity
+            else:
+                bag[item_id]['items_by_size'][size] = quantity
+        else: # Use a dictionary so that different item ids can be posted, and multiple sizes posted can be tracked.
+            bag[item_id] = {'items_by_size': {size: quantity}}
+    else:
+        if item_id in list(bag.keys()):
+            bag[item_id] += quantity #increment quantity if this item is already in the bag
+        else:
+            bag[item_id] = quantity # add or update
+
+```
+
+* In bag -> Contexts.py
+
+- Change 'quantity' to 'item_data' because this variable is now a dictionary with quantity and size for each time this item is purchased
+- Add logic to handle this differently if it is a dictionary with the new data
+
+```
+ # Using the bag from the session data... update total, product count
+    for item_id, item_data in bag.items():
+        if isinstance(item_data, int): #implement this if iteme data exists as an integer
+            product = get_object_or_404(Product, pk=item_id)
+            total += item_data * product.price
+            product_count += item_data
+            bag_items.append({
+                'item_id': item_id,
+                'quantity': item_data,
+                'product': product,
+            })
+        else: # this must be a dictionary so it must be handled differently.
+            product = get_object_or_404(Product, pk=item_id)
+            for size, quantity in item_data['items_by_size'].items():
+                total += quantity * product.price
+                product_count += quantity
+                bag_items.append({
+                    'item_id': item_id,
+                    'quantity': item_data,
+                    'product': product,
+                    'size': size,
+                })
+
+
+```
+
+* In bag.html render the variables we need to view and format just to see what need to be accessed and how:
+
+```
+{{ bag_items }}<br><br>
+
+                    {{ request.session.bag }}
+```
+
+Tip: In Chrome -> Dev Tools -> Applications -> Storage -> Cookies -> Right click and clear the cookie for this session to clear the bag.
 
 
 
