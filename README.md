@@ -1366,7 +1366,7 @@ if size:
 
 ```
 
-* In bag.html render the variables we need to view and format just to see what need to be accessed and how:
+* USEFUL! In bag.html render the variables we need to view and format just to see what need to be accessed and how:
 
 ```
 {{ bag_items }}<br><br>
@@ -1397,6 +1397,50 @@ Fix: `     size = request.POST['product_size']`
 {% endblock %}
 
 ```
+
+## Update product quantity from the shopping bag
+
+* Add form with method of post and class of update-form
+* use csrf_token
+* paste from product detail and reformat css
+* update product template variables to item.item_id
+* submit this in a hidden input field if the product does have sizes:
+
+```
+{% if item.product.has_sizes %}
+<input type="hidden" name="product_size" value="{{ item.size }}">
+{% endif %}
+```
+
+* Update contexts.py to display quantity for products with sizes: `'quantity': quantity,`
+
+* To submit this, use js ( bottom of bag.html):
+
+```
+<script type="text/javascript">
+    // Update quantity on click
+    $('.update-link').click(function(e) {
+        var form = $(this).prev('.update-form');
+        form.submit();
+    })
+
+    // Remove item and reload on click
+    $('.remove-item').click(function(e) {
+        var csrfToken = "{{ csrf_token }}";
+        var itemId = $(this).attr('id').split('remove_')[1];
+        var size = $(this).data('size');
+        var url = `/bag/remove/${itemId}`;
+        var data = {'csrfmiddlewaretoken': csrfToken, 'size': size};
+
+        $.post(url, data)
+         .done(function() {
+             location.reload();
+         });
+    })
+</script>
+```
+
+* Update base.css to style cursor pointer over Update and Remove links.
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
