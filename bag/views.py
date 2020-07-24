@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,reverse, HttpResponse
 
 # Create your views here.
 
@@ -37,4 +37,60 @@ def add_to_bag(request, item_id):
 
     request.session['bag'] = bag # override the variable in the session with the updated version
     return redirect(redirect_url)
+    
+def adjust_bag(request, item_id):
+    """ Adjust a quantity or remove from shopping bag """
+    quantity = int(request.POST.get('quantity')) #convert to integer as the template will send this as a string
+
+    # If product size is in the product url, set the variable 'size' to this value
+    size = None
+    if 'product_size' in request.POST:
+        size = request.POST['product_size']
+
+    # Store the shopping bag data in the http request session. This will persist until user closes their browser
+    bag = request.session.get('bag', {})
+
+    # either update the product quantity or remove it
+    if size:
+        if quantity > 0:
+            bag[item_id]['items_by_size'][size] = quantity
+        else:
+            del bag[item_id]['items_by_size'][size]
+            if not bag[items_id]['items_by_size']: #remove dictionary if product doesn't use sizes
+                bag.pop(item_id)    
+             
+    else:
+        if quantity > 0:
+            bag[item_id] = quantity
+        else:
+           bag.pop(item_id)
+
+    request.session['bag'] = bag # override the variable in the session with the updated version
+    return redirect(reverse('view_bag'))
+
+def remove_from_bag(request, item_id):
+    """ Remove item from shopping bag """
+
+    try:
+        # If product size is in the product url, set the variable 'size' to this value
+        size = None
+        if 'product_size' in request.POST:
+            size = request.POST['product_size']
+
+        # Store the shopping bag data in the http request session. This will persist until user closes their browser
+        bag = request.session.get('bag', {})
+
+        # remove the size from the sizes dictionary for this product
+        if size:
+            del bag[item_id]['items_by_size'][size]
+            if not bag[items_id]['items_by_size']: #remove dictionary if product doesn't use sizes
+                bag.pop(item_id)
+                
+        else:
+            bag.pop(item_id)
+
+        request.session['bag'] = bag # override the variable in the session with the updated version
+        return HttpResponse(status=200) # return successful http response
+    except Exception as e:
+        return HttpResponse(status=500)
     

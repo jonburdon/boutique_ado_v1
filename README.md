@@ -1442,6 +1442,77 @@ Fix: `     size = request.POST['product_size']`
 
 * Update base.css to style cursor pointer over Update and Remove links.
 
+
+## Adjust Quantity
+
+Copy and paste add_to_bag in bad views.py, rename to adjust_bag
+
+Remove the redirect (we always want to stay on the bag page)
+
+Change logic to update quantity or remove it:
+
+```
+   if size:
+        if quantity > 0:
+            bag[item_id]['items_by_size'][size] = quantity
+        else:
+            del bag[item_id]['items_by_size'][size]    
+             
+    else:
+        if quantity > 0:
+            bag[item_id] = quantity
+        else:
+           bag.pop[item_id]
+
+    request.session['bag'] = bag # override the variable in the session with the updated version
+    return redirect(reverse('view_bag'))
+
+```
+
+* update url
+
+* in bag.html update the form `<form class="form update-form" method="POST" action="{% url 'adjust_bag' item.item_id %}">`
+
+## Remove directly without setting quantity to zero via adjust_bag
+
+* copy adjust_bag
+
+* update logic to remove  item via the remove_from_bag function
+
+* NOTE: try block was added using http response
+
+* update urls
+
+* update js in bag.html to use consistent variables (change size to product_size)
+
+* change slim version of jquery that loads with bootstrap to the full version from : https://code.jquery.com/ and load in base.html
+
+
+## Using a template filter to change the subtotal to quantity x product price
+
+* in bag folder create new folder called templatetags
+
+* create bag_tools.py
+* create __init__.py to make this module available in templates
+
+* To use this filter create register which is an instance of template.Library. Use this to register this function as a template filter
+
+```
+from django import template
+
+register = template.Library()
+
+@register.filter(name='calc_subtotal')
+def calc_subtotal(price, quantity):
+    return price * quantity
+```
+
+* load in bag.html with `{% load bag_tools %}`
+
+* Pass it the price `<p class="my-0">${{ item.product.price | calc_subtotal:item.quantity }}</p>`
+
+* Subtotal now updates in bag.html
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
