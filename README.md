@@ -1513,6 +1513,51 @@ def calc_subtotal(price, quantity):
 
 * Subtotal now updates in bag.html
 
+## Adding Toasts
+
+* in main folder -> templates -> includes create folder called toasts then 4 files for error, info, success and warning .html
+
+* use data-autohide="false" to allow the user to dismiss this when they have read the message.
+
+* Paste in bootstrap toast code and customise.
+
+* in base.html:
+
+```
+    {% if messages %}
+        <div class="message-container">
+            {% for message in messages %}
+                {% include 'includes/toasts/toast_success.html' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+```
+* in bag views.py
+
+```
+from django.contrib import messages
+from products.models import Product
+```
+* in add_to_bag `product = Product.objects.get(pk=item_id)` and `messages.success(request, f'Added {product.name} to your bag')`
+
+* In base.html call the toast method from Bootstrap with an option of 'show' on any elements with the toast class:
+
+```
+    <script type="text/javascript">
+    $('.toast').toast('show');
+    </script>
+```
+
+* In Settings.py - store messages in the browser session: `MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'`
+
+* Add if statements for different message types. These are message levels in django: 40 is an error, 30 is a warning, 20 is success, info toast will be used as default
+
+
+
+
+* Add css to position toasts in top right of screen and use z-index to position on top
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
