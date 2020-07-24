@@ -1571,6 +1571,12 @@ from products.models import Product
 * Add messages to remove_from_bag
 including `messages.error(request, f'Error removing item {e}')`
 
+* Add css to style arrows etc - copied from Bootstrap
+
+* Update success toast:
+- Add a preview of the bag in the notifcation if there is a grand total
+- Add bag notification wrapper to base.css to restrict size of the success toast
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
