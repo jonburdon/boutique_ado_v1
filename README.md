@@ -1553,10 +1553,23 @@ from products.models import Product
 
 * Add if statements for different message types. These are message levels in django: 40 is an error, 30 is a warning, 20 is success, info toast will be used as default
 
-
-
-
 * Add css to position toasts in top right of screen and use z-index to position on top
+
+* Add further messages:
+- Add to bag:
+- `messages.success(request, f'Updated {product.name} quanity to {bag[item_id]}')`
+- `messages.success(request, f'Added size {size.upper()} {product.name} to your bag')` (two locations)
+- `messages.success(request, f'Updated size {size.upper()} {product.name} quantity to {bag[item_id]["items_by_size"][size]}')`
+- Adjust bag:
+- `messages.success(request, f'Updated {product.name} quantity to {bag[item_id]}')`
+- `messages.success(request, f'Removed {product.name} from your bag')`
+- etc
+
+* Add `product = Product.objects.get(pk=item_id)` to adjust_bag so the strings will work
+* update to `product = get_object_or_404(Product, pk=item_id)` in case product isn't found
+
+* Add messages to remove_from_bag
+including `messages.error(request, f'Error removing item {e}')`
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
