@@ -1661,6 +1661,9 @@ including `messages.error(request, f'Error removing item {e}')`
 
 - add checkout url to the checkout button in bag.html
 
+
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
