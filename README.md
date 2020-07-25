@@ -1577,6 +1577,10 @@ including `messages.error(request, f'Error removing item {e}')`
 - Add a preview of the bag in the notifcation if there is a grand total
 - Add bag notification wrapper to base.css to restrict size of the success toast
 
+## Checkout App (Anonymous Checkout)
+
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
