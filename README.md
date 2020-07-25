@@ -1579,7 +1579,55 @@ including `messages.error(request, f'Error removing item {e}')`
 
 ## Checkout App (Anonymous Checkout)
 
+* python3 manage.py startapp checkout
 
+* Add this to list of installed apps in settings.py
+
+* Create data structure in -> Models.py
+
+* Create methods to handle the checkout process
+
+* dryrun creating the models
+
+* python3 manage.py makemigrations --dry-run
+
+* python3 manage.py makemigrations
+
+* Plan their execution
+
+* python3 manage.py migrate --plan
+
+* python3 manage.py migrate
+
+
+## Adding Orders to Admin
+
+* In checkout, admin.py:
+- import order and order_line_item models
+- create class order_admin
+- read only fields for order number, date, del cost, order total and grand total
+- use fields option so we can specify the order of these fields
+- Use list display option to restrict which columns display in admin
+- order by date in reverse chronological order
+- Make orderlineitems editable in the order admin display using TabularInline class
+
+* Need to update costs as users add line items to the order
+- Need to call the method we already created each time a line item is created. Built in django feature signals can do this
+- Create file signals.py
+- import the signals Postsave and Postdelete
+- These signals are sent to the entire app after a model is saved or deleted
+- These use dispatch and reciever from django.dispatch
+- define update_on_save with the parameters sender (sender of signals), instance (which models sent it) and created (is this new or not?) key word arguments - kwargs.
+- Call the update total
+- use the @receiver decorator to tell post save signals from the orderlineitem model is used
+- update checkout -> apps.py to override ready method and import signals module.
+
+## Checkout form
+
+* create forms.py in checkout app
+- import forms and order model
+- create order form class with meta options for model and fields
+- set up default form with a dictionary or placeholders
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
