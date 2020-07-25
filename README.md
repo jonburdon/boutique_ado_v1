@@ -1628,6 +1628,38 @@ including `messages.error(request, f'Error removing item {e}')`
 - import forms and order model
 - create order form class with meta options for model and fields
 - set up default form with a dictionary or placeholders
+- insert placeholder data in to the form, remove the labels and add a css class for use later
+
+## The checkout views and templates
+- in views.py get bag from session, add an error message if there is nothing in bag, create instance of order form, create template and context, render it.
+- create checkout -> urls.py
+- update project level urls file
+-  create checkout/templates/checkout/checkout.html
+- Use shopping bag as a structure
+- use separate extra css block static/checkout/css/checkout.css
+- install crispyforms in terminal. This allows us to style forms with bootstrap automatically
+- `pip3 install django-crispy-forms`
+- Add `    'crispy_forms',` to installed apps in settings.py
+- in settings.py `CRISPY_TEMPLATE_PACK = 'bootstrap4`
+- Add list 'builtins' to settings.py - this installs Crispy-forms to all our templates by default:
+
+```
+            'builtins': [
+                'crispy_forms.templatetags.crispy_forms_tags',
+                'crispy_forms.templatetags.crispy_forms_field',
+            ]
+
+```
+
+- `pip3 freeze > requirements.txt`
+- Create checkout form in three fieldsets with different styling.
+- use as_crispy-fields template tag to style
+- include option to save this delivery into to my profile, sign up or login.
+- include two empty divs for card-element and card-errors to be built by stripe
+- MEDIA_URL template tag will not work without a processor for this.
+- Add this to settings.py in templates - options: `'django.template.context_processors.media',`
+
+- add checkout url to the checkout button in bag.html
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
