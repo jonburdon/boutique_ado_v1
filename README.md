@@ -1687,11 +1687,46 @@ In checkout.css add styling to the bootstrap form to match site styles.
 - Create stripe_elements.js inside checkout js folder within checkout / static
 - In checkout.css add `stripe-style-input` class to ensure the styles from stripe apply to all form elements.
 - Add the new stripe_elements.js to the checkout.html postload.js block
+- Pass stripe error to messaging display in stripe_elements.js
 
+* In checkout.views.py import bag contents function from bag.context to make it available for use. `from bag.contexts import bag_contents`
 
+* in checkout method:
+    - calculate checkout total round it to an integer for Stripe.
+* `pip3 install stripe`
+* import stripe in views.py
 
+* In Settings.py:
+- Add stripe currency
+- Add stripe public key to get from environment
+- Add stripe secret key to get from environment
 
+To set these in gitpod, (also works on Mac but in windows use SET command) use the export command:
+In Terminal:
+`export STRIPE_PUBLIC_KEY=Paste-yours-here`
+`export STRIPE_SECRET_KEY=Paste-yours-here`
 
+Don't forget this is not permanent! They need to be added each time workspace is started.
+To make these permanent in Gitpod: 
+- Account icon (upper right)
+- Settings
+- Enter them in the environment variables section
+
+* In views.py
+- Add the public and secret key variables
+- Set these on stripe.api_key
+- pass stripe.paymentintent.create  amount and currency
+- for now just print(intent) - refresh page, this intent variable will be seen in terminal
+- update context to use the key from above and change client_secret to intent.client_secret
+- Add alert message if public key not set
+
+- Add listener to the payment forms submit event. Copy this from Stripe documentation and make a few changes. (https://stripe.com/docs/payments/accept-a-payment#web-collect-card-details)
+- Paste in to stripe_elements.js - see comments for changes
+- Change variable names to Camel Case for best practise
+
+* Test - use card number 4242 4242 4242 4242 any CVC, and date in the future and any 5 digit postal code
+
+* In Stripe Dashboard - click Developers -> Events -> Check payment was successful
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
