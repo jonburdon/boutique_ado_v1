@@ -1661,13 +1661,42 @@ including `messages.error(request, f'Error removing item {e}')`
 
 - add checkout url to the checkout button in bag.html
 
+## Stripe payments setup:
+
+In checkout.css add styling to the bootstrap form to match site styles.
+
+* Visit stripe.com and create an account or log in
+
+* We need test API keys (later)
+
+* Follow https://stripe.com/docs/payments/accept-a-payment#web-collect-card-details
+- Include Stripe js in base.html
+- In postload.js block in checkout.html:
+    - Use json_script template filter to access variables.
+    - Use stripe_public_key and client_variables
+- Add these to checkout app -> Views ... contexts"
+
+```
+    context = {
+        'order_form': order_form,
+        'stripe_public_key': 'the public key',
+        'secret_key': 'test client secret',
+    }
+```
+- Now if you check the rendered front end html you will see both values displayed for the world to see! They are matched to what we sent into the json_script built in template filter.
+- Create stripe_elements.js inside checkout js folder within checkout / static
+- In checkout.css add `stripe-style-input` class to ensure the styles from stripe apply to all form elements.
+- Add the new stripe_elements.js to the checkout.html postload.js block
+
+
+
 
 
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
-
+Stripe: https://stripe.com/docs/payments/accept-a-payment#web-collect-card-details
 
 
 
