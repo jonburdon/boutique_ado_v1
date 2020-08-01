@@ -1754,6 +1754,22 @@ To make these permanent in Gitpod:
 - In checkout success, add order summary. Note we are using one row for each form field in the order summary. Use a for loop to generate a new row for each line item and then insert product name, quantity and price etc.
 - Use if statements to only show unrequired fields if they have been completed.
 
+- Add loading overlay div to checkout.html (after main container div, last div in main block)
+- in checkout.css add the css to cover whole page and display loading-spinner
+- in stripe_elements.js, trigger the overlay when user clicks submit button and reverse this if there is an error:
+
+```
+$('#payment-form').fadeToggle(100);
+    $('#loading-overlay').fadeToggle(100);
+```
+
+* Use different test card number, this time with extra authentication from Stripe: 4000002500003155
+
+- Now when the stripe popup asks for authentication if we cancel, the form data should be intact but if we authenticate, the process should work and remove the popup
+
+
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
