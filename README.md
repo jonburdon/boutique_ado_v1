@@ -1771,8 +1771,12 @@ $('#payment-form').fadeToggle(100);
 
 If the user accidentallt closes the window after communicating stripe this order would not be completed and all sorts of errors could occur. Therefore redundancy must be built in. Use Webhooks to listen for this data.
 
-
-
+- Create webhook_handler.py
+- Create class method called handle event. Accept this from stripe and send http response indicating it was received.
+- By creating a class, they code is easily reuseable.
+- Create an event map to handle different events.
+- Get event type from Stripe eg succeeded failed
+- Look up it's type in dictionary
 
 
 ## Useful Documentation:
