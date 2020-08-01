@@ -1750,6 +1750,10 @@ To make these permanent in Gitpod:
 - signals are not yet working (total is not updating in order model in admin)
 - change second function name to update_on_delete in signals.py
 
+# Creating an order summary and redundancy Handling
+- In checkout success, add order summary. Note we are using one row for each form field in the order summary. Use a for loop to generate a new row for each line item and then insert product name, quantity and price etc.
+- Use if statements to only show unrequired fields if they have been completed.
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
