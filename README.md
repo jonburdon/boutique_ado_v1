@@ -1778,6 +1778,8 @@ If the user accidentallt closes the window after communicating stripe this order
 - Get event type from Stripe eg succeeded failed
 - Look up it's type in dictionary
 
+* In Stripe - Developers -> Webhooks -> Send test webhook
+
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
