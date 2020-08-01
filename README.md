@@ -1726,7 +1726,9 @@ To make these permanent in Gitpod:
 
 * Test - use card number 4242 4242 4242 4242 any CVC, and date in the future and any 5 digit postal code
 
-* In Stripe Dashboard - click Developers -> Events -> Check payment was successful
+* In Stripe Dashboard - click Developers -> Events -> Check payment was successful. MAKE SURE you select 'Viewing test data.'
+
+
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
