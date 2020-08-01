@@ -31,11 +31,9 @@ def checkout(request):
         order_form = OrderForm(form_data)
         if order_form.is_valid():
             order = order_form.save()
-# itterate through the form data and create each bag item as an order item
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
-                    # If it's an integer we know it doesn't have sizes, it's just the item data
                     if isinstance(item_data, int):
                         order_line_item = OrderLineItem(
                             order=order,
@@ -43,7 +41,6 @@ def checkout(request):
                             quantity=item_data,
                         )
                         order_line_item.save()
-                    # If it has sizes, itterate through each size and create item accordingly
                     else:
                         for size, quantity in item_data['items_by_size'].items():
                             order_line_item = OrderLineItem(
@@ -60,7 +57,7 @@ def checkout(request):
                     )
                     order.delete()
                     return redirect(reverse('view_bag'))
-            # If the user opted to save their info to the session, save it.
+
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(reverse('checkout_success', args=[order.order_number]))
         else:
