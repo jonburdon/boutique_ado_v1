@@ -1767,6 +1767,11 @@ $('#payment-form').fadeToggle(100);
 
 - Now when the stripe popup asks for authentication if we cancel, the form data should be intact but if we authenticate, the process should work and remove the popup
 
+## Adding Stripe webhooks
+
+If the user accidentallt closes the window after communicating stripe this order would not be completed and all sorts of errors could occur. Therefore redundancy must be built in. Use Webhooks to listen for this data.
+
+
 
 
 
