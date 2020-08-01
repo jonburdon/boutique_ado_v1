@@ -1728,7 +1728,27 @@ To make these permanent in Gitpod:
 
 * In Stripe Dashboard - click Developers -> Events -> Check payment was successful. MAKE SURE you select 'Viewing test data.'
 
+## Adding functionality to checkout flow
 
+* Creating the order in the database
+- In checkout views.py, add an if method == post.
+- Wrap current code in an else block
+- See comments in the code
+
+- Create checkout success view.
+- Create url for checkout success 
+- Create checkout_success.html
+
+- Get signals working. in Checkout init.py tell django the config class for the apps. Without this, django would not know custom ready methods therefore signals would not work
+- restart signals.
+
+- In models.py add `or 0` line to:
+- `self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0`
+- This will set the order total to zero instead of 'none' if the line items are manually removed, and avoids an error.
+
+- restart server - check checkout success works in stripe and in database
+- signals are not yet working (total is not updating in order model in admin)
+- change second function name to update_on_delete in signals.py
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
