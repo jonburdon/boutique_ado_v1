@@ -1778,7 +1778,14 @@ If the user accidentallt closes the window after communicating stripe this order
 - Get event type from Stripe eg succeeded failed
 - Look up it's type in dictionary
 
-* In Stripe - Developers -> Webhooks -> Send test webhook
+Add wh secret in settings.py
+In Stripe Developers -> Add endpoint, receive all. Copy signing secret
+
+NB for webhooks to connect they must be exported to the environment using `export STRIPE_WH_SECRET=thesecretkeygoeshere` - best to also save in Github Settings
+
+* In Stripe - Developers -> Webhooks -> check test and then test webhooks. The messaeges in Webhook handler should be displayed conditionally according to the webhook sent. Try testing by using a different message for failed.
+
+
 
 
 ## Useful Documentation:
