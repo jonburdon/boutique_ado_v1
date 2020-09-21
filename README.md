@@ -1972,6 +1972,7 @@ Problem with previous accounts having no profile can be worked around by comment
 * Add order fields in checkout apps admin.py
 * Update checkout views.py to pre fill checkout information from profile if user is authenticated. Otherwise render an empty form.
 
+* Update webhook handler to use profile data in meta data key.
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
