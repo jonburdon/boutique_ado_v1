@@ -1974,6 +1974,39 @@ Problem with previous accounts having no profile can be worked around by comment
 
 * Update webhook handler to use profile data in meta data key.
 
+* Update webhook handler to send confirmation email when webhook from Stripe received.
+* Create email .txt template files.
+```
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+```
+* Store customer email as variable
+* Render template files as strings
+* This creates email content:
+
+```
+    def _send_confirmation_email(self, order):
+        """Send the user a confirmation email"""
+        cust_email = order.email
+        subject = render_to_string(
+            'checkout/confirmation_emails/confirmation_email_subject.txt',
+            {'order': order})
+        body = render_to_string(
+            'checkout/confirmation_emails/confirmation_email_body.txt',
+            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+        
+        send_mail(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [cust_email]
+        )        
+
+```
+* Add default from email to settings.py
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
