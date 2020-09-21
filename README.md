@@ -1785,6 +1785,44 @@ NB for webhooks to connect they must be exported to the environment using `expor
 
 * In Stripe - Developers -> Webhooks -> check test and then test webhooks. The messaeges in Webhook handler should be displayed conditionally according to the webhook sent. Try testing by using a different message for failed.
 
+Add to Checkout / Static / js / stripe_elements.js to include payment_method address and shipping_address data.
+
+### Adding Meta data to pass through Stripe webhooks
+
+Add logic to the webhook to determine whether the user checked the save data option in the form.
+This is not supported in the card payment method, so it needs to be added server side:
+
+Create cache_checkout_data view in views.py
+import require_POST
+
+```
+@require_POST
+def cache_checkout_data(request):
+    try:
+        pid = request.POST.get('client_secret').split('_secret')[0]
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.PaymentIntent.modify(pid, metadata={
+            'bag': json.dumps(request.session.get('bag', {})),
+            'save_info': request.POST.get('save_info'),
+            'username': request.user,
+        })
+        return HttpResponse(status=200)
+    except Exception as e:
+        messages.error(request, 'Sorry, your payment cannot be \
+            processed right now. Please try again later.')
+        return HttpResponse(content=e, status=400)
+```
+* Include a json dump of their shopping bag. VERY USEFUL for later!
+
+* Create a url to access the new view.
+
+### Summary of Stripe Elements.js functionality:
+
+* If form is submitted, form submission is prevented (line 51). Card element is hidden and loading overlay is displayed.
+* Form is captured in variables that aren't sent to stripe, post to cached_checkout_data view.
+* If card payment success, form is submitted
+* If fail - re-enable card element and display error for the user.
+
 
 
 
