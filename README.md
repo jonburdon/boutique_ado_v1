@@ -1823,7 +1823,48 @@ def cache_checkout_data(request):
 * If card payment success, form is submitted
 * If fail - re-enable card element and display error for the user.
 
+### Handling checkout data after this has passed through payment success webhook
 
+* If everything was successful, the order should now exist in our database.
+* Check if this is the case in webhook handler py and pass success or 500 back to Stripe.
+* Use while loop and python time function to cause webhook handler to find the order 5 times over 5 seconds before giving up and creating the order.
+* To handle a case where the user has already ordered the same item...
+* Change models.py to contain original_bag and stripe_pid
+
+```
+python3 manage.py makemigrations --dry-run
+python3 manage.py makemigrations
+python3 manage.py migrate --plan
+python3 manage.py migrate
+```
+* change admin.py fields to contain original_bag and stripe_pid fields and read only fields.
+
+* change views.py to add those fields when the form is submitted.
+
+* Add to checkout.html template:
+```
+<!-- Pass the client secret to the view so we can get the payment intent id -->
+<input type="hidden" value="{{ client_secret }}" name="client_secret">
+```
+
+* In views.py save payment id and rest of shopping bag data:
+```
+order = order_form.save(commit=False)
+            pid = request.POST.get('client_secret').split('_secret')[0]
+            order.stripe_pid = pid
+            order.original_bag = json.dumps(bag)
+            order.save()
+```
+
+* Ensure webhook handler is using the pid and original_bag fields.
+* import the models it now uses.
+```
+from .models import Order, OrderLineItem
+from products.models import Product
+
+import json
+import time
+```
 
 
 ## Useful Documentation:
