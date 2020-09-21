@@ -1866,6 +1866,38 @@ import json
 import time
 ```
 
+## Updates to checkout.
+
+* change order of fields in checkout.html
+* change country fields to a dropdown box to prevent confusing users with unfriendly errors.
+`pip3 install django-countries`
+`pip3 freeze > requirements.txt`
+
+* In models.py
+`from django_countries.fields import CountryField`
+Change to use select field:
+`country = CountryField(blank_label='Country *', null=False, blank=False)`
+
+```
+python3 manage.py makemigrations --dry-run
+python3 manage.py makemigrations
+python3 manage.py migrate --plan
+python3 manage.py migrate
+```
+
+* In static checkout_css grey out the select field if nothing is selected.
+```
+select, select option {
+    color: #000000;
+}
+
+select:invalid, select option[value=""] {
+    color: #aab7c4 !important;
+}
+```
+
+## User Profile
+
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
