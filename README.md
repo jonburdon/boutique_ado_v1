@@ -1954,6 +1954,14 @@ Problem with previous accounts having no profile can be worked around by comment
 * Update profile -> views.py to get profile and return it to the template.
 * Update profile template to display ` {{ profile }}`
 
+* Create forms.py in profile app by refactoring code from checkout app
+* Add this form to views.py
+
+* Update profile.html
+* Update models.py
+* Update profile.css and countryfield.js to style the country field correctly.
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
