@@ -1896,8 +1896,63 @@ select:invalid, select option[value=""] {
 }
 ```
 
-## User Profile
+## User Profile App
 
+* Create an app called profile and add it to installed apps in boutique_ado -> settings.py -> intalled_apps
+
+`python3 manage.py startapp profiles`
+
+
+* In profiles -> models.py
+
+- Create OneToOne relationship field. One to one will mean each user can only create one profile.
+- Add defaults for phone number, country, post code etc.
+- These are optional so null and blank can be set to true.
+- Import django-countries to use select field for countries.
+- Create string method to return the username
+- Add a receiver for post save event. Each time a user is created, create a profile or save it if the user already exists.
+- import save and receiver for the signal to work
+
+* In checkout -> models.py
+- `from profiles.models import UserProfile`
+- Create a foreign key to it 
+
+```
+python3 manage.py makemigrations --dry-run
+python3 manage.py makemigrations
+python3 manage.py migrate --plan
+python3 manage.py migrate
+```
+
+* Create views.py for profile app
+* create url for this view.
+* Add urls in project level file.
+* Create templates and css file.
+
+## Adjust Allauth to add top padding
+
+* Login has it's own base template block. So modify allauth account/base template.
+* Rename login.html content block to inner content.
+* Change to {{form|crispy}} to render as a form not a paragraph
+* Adjust styling
+* Add home button
+* Add inner_content to ALL other allauth templates in the folder.
+* Update base.css with allauth formatting styles
+
+NOTE:
+Problem with previous accounts having no profile can be worked around by commenting out code in profiles -> models.py as follows and then logging in with that account:
+
+```
+   # if created:
+    UserProfile.objects.create(user=instance)
+    # Existing users: just save the profile
+  #  instance.userprofile.save()
+
+```
+
+* Update base.html with link to profile. `<a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>`
+* Update profile -> views.py to get profile and return it to the template.
+* Update profile template to display ` {{ profile }}`
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
