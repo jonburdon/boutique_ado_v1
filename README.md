@@ -1961,6 +1961,17 @@ Problem with previous accounts having no profile can be worked around by comment
 * Update models.py
 * Update profile.css and countryfield.js to style the country field correctly.
 
+* Update Toasts `   {% if grand_total and not on_profile_page %}`
+
+* Add Order History display code to profile.html
+* Define order history in views.py
+* Use checkout/checkout_success.hmtl as template
+* Create the url `path('order_history/<order_number>', views.order_history, name='order_history'),`
+* Update checkout success page to render a back button instead of latest deals button that would otherwise appear.
+
+* Add order fields in checkout apps admin.py
+* Update checkout views.py to pre fill checkout information from profile if user is authenticated. Otherwise render an empty form.
+
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
