@@ -2006,6 +2006,10 @@ from django.conf import settings
 ```
 * Add default from email to settings.py
 
+* This should now send confirmation email (printed to terminal)
+
+## Store Owner Product Admin
+
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
