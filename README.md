@@ -2008,7 +2008,57 @@ from django.conf import settings
 
 * This should now send confirmation email (printed to terminal)
 
-## Store Owner Product Admin
+## Store Owner Product Admin - allow django superusers to Add, Update and Delete products in the store
+
+* Create forms.py in product app. Use friendly names to display forms.
+
+```
+from django import forms
+from .models import Product, Category
+
+
+class ProductForm(forms.ModelForm):
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        categories = Category.objects.all()
+        friendly_names = [(c.id, c.get_friendly_name()) for c in categories]
+
+        self.fields['category'].choices = friendly_names
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'border-black rounded-0'
+```
+
+* Create a new view:
+
+```
+def add_product(request):
+    """ Add a product to the store """
+    form = ProductForm()
+    template = 'products/add_product.html'
+    context = {
+        'form': form,
+    }
+
+    return render(request, template, context)
+```
+ Import the form:
+
+ `from .forms import ProductForm`
+
+ Create the url
+ `path('add/', views.add_product, name='add_product'),`
+
+
+ Create add_products.html by refactoring code from checkout.html
+
+
+ 
+
 
 
 ## Useful Documentation:
