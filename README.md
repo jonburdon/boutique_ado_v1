@@ -2056,8 +2056,34 @@ def add_product(request):
 
  Create add_products.html by refactoring code from checkout.html
 
+Update form handler for add product:
 
- 
+```
+def add_product(request):
+    """ Add a product to the store """
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Successfully added product!')
+            return redirect(reverse('add_product'))
+        else:
+            messages.error(request, 'Failed to add product. Please ensure the form is valid.')
+    else:
+        form = ProductForm()
+        
+    template = 'products/add_product.html'
+    context = {
+        'form': form,
+    }
+
+    return render(request, template, context)
+```
+
+* Update toast_success.html to handle no image.
+* Add fix on shopping bag page too.
+
+* Add link to Add Product page in base template and mobile top header.
 
 
 
