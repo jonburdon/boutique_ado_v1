@@ -2528,4 +2528,6 @@ Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/
 Stripe: https://stripe.com/docs/payments/accept-a-payment#web-collect-card-details
 
 
+For temporary email:
+https://tempail.com/en/
 
