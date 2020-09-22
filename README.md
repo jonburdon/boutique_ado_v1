@@ -2246,6 +2246,51 @@ class CustomClearableFileInput(ClearableFileInput):
 {% endblock %}
 ```
 
+# Deployment
+
+* On Heroku Website https://dashboard.heroku.com/apps , New -> Create New App
+* Choose App name and region.
+* Use Resources - Addons - Heroku Postgres
+
+* In gitpod:
+- pip3 install dj_database_url
+- pip3 install psycopg2-binary
+- pip3 freeze > requirements.txt
+
+* In settings.py
+- `import dj_database_url`
+
+```
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
+
+
+DATABASES = {
+    'default': dj_database_url.parse('postgress-url-goes-here')
+}
+```
+* NB Get url from Heroku App settings tab / reveal config vars.
+
+* Run migrations again (different database)
+
+* `python3 manage.py showmigrations` Will show none exist
+
+* `python3 manage.py migrate`
+
+* To import product data, use fixtures:
+- `python3 manage.py loaddata categories`
+- `python3 manage.py loaddata products`
+- NB categories must be created first as products depend on them.
+
+* Create superuser account in the new database
+- `python3 manage.py createsuperuser`
+
+
+NB DO NOT COMMIT DATABASE URL TO VERSION CONTROL.
 
 
 ## Useful Documentation:
