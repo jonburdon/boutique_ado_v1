@@ -2447,7 +2447,7 @@ if 'USE_AWS' in os.environ:
 - Add these config vars in Heroku: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, USE_AWS.
 - Delete Config Var for DISABLE_COLLECTSTATIC
 
-- create custom_storages.py in main project folder.
+- create custom_storages.py in main project folder. NB CHECK this location carefully. It should be at the same level as README.md
 ```
 from django.conf import settings
 from storages.backends.s3boto3 import S3Boto3Storage
