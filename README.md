@@ -2156,7 +2156,6 @@ def add_product(request):
 ```
 
 * Add delete buttons on products cards and on product detail pages.
-* On products.html - in product card:
 ```
 {% if request.user.is_superuser %}
                                                 <small class="ml-3">
@@ -2165,6 +2164,13 @@ def add_product(request):
                                                 </small>
                                             {% endif %}
 ```
+
+### Secure view so that only super users can delete products
+
+* In product app -> views.py:
+* `from django.contrib.auth.decorators import login_required`
+* Add `@login_required` above all views that are for admin only.
+* Add similar functionality to the profile view.
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
