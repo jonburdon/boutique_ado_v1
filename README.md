@@ -2085,7 +2085,11 @@ def add_product(request):
 
 * Add link to Add Product page in base template and mobile top header.
 
+### Editing Products
 
+* Create edit_product.html page template.
+* Send form to a new url - edit_product - and send product ID with it.
+* Add a new view to render the template
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
