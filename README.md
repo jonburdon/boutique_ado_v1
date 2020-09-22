@@ -2318,6 +2318,13 @@ else:
 
 * In settings.py `ALLOWED_HOSTS = [jb-boutique-ado.herokuapp.com, 'localhost']`
 
+* If the app was created on the heroku website, set the remote repo. `heroku git:remote -a jb-boutique-ado`
+
+* to check: `git remote -v`
+
+* The great moment! `git push heroku master`
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
