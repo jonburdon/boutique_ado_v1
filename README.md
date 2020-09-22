@@ -2310,7 +2310,7 @@ else:
 
 * `pip3 install gunicorn`
 * `pip3 freeze > requirements.txt`
-* Create `Procfile` in root folder with the contents `web: gunicorn boutique_ado.wsgi:application`
+* Create `Procfile` in root folder with the contents `web: gunicorn jb-boutique-ado.wsgi:application`
 
 * In terminal:
 - 'heroku login' or 'heroku login -i'
