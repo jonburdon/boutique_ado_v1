@@ -2292,6 +2292,31 @@ DATABASES = {
 
 NB DO NOT COMMIT DATABASE URL TO VERSION CONTROL.
 
+* Update settings.py to connect to a different database depending on if this is deployed or production version:
+
+```
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+```
+
+* `pip3 install gunicorn`
+* `pip3 freeze > requirements.txt`
+* Create `Procfile` in root folder with the contents `web: gunicorn boutique_ado.wsgi:application`
+
+* In terminal:
+- 'heroku login' or 'heroku login -i'
+- `heroku config:set DISABLE_COLLECTSTATIC=1 --app jb-boutique-ado`
+
+* In settings.py `ALLOWED_HOSTS = [jb-boutique-ado.herokuapp.com, 'localhost']`
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
