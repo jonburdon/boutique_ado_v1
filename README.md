@@ -2338,6 +2338,129 @@ else:
 -  Update settings.py to contain it: `SECRET_KEY = os.environ.get('SECRET_KEY', '')`
 - Set `DEBUG = 'DEVELOPMENT' in os.environ` in settings.py
 
+## Creating an AWS Account
+
+* Use AWS s3 to store static files.
+- Create account at https://aws.amazon.com/
+- Account type personal
+- Go to AWS Management Console.
+- Open s3
+- Create new bucket
+- In Set Permissions, uncheck Block All Public Access
+
+* Bucket settings:
+- Properties -> Static Website Hosting
+- Use default values index.html and error.html
+- Save
+- Permissions:
+- CORS Configuration:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+<AllowedOrigin>*</AllowedOrigin>
+<AllowedMethod>GET</AllowedMethod>
+<MaxAgeSeconds>3000</MaxAgeSeconds>
+<AllowedHeader>Authorization</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+```
+- Bucket Policy -> Policy Generator
+- Policy Type: s3 Bucket Policy
+- Principal: *
+- Action: GetObject
+- Copy ARN from the other tab eg `arn:aws:s3:::jb-boutique-ado`
+- Add statement
+- Generate Policy
+- Copy Policy into other tab 'Bucket Policy'
+- BEFORE SAVING: add /* into the resource key `"Resource": "arn:aws:s3:::jb-boutique-ado/*",`
+- Access Control list -> Public Access -> Tick 'List Objects' and save.
+
+* Use AWS service 'IAM' to connect to the bucket
+- Go to IAM
+- Click Access Management -> Groups
+- Create New Group 'manage-boutique-ado'
+- Click next twice (no policy to attach yet)
+- Create Group
+- Policies -> Create Policy
+- Create Policy
+- json tab -> Import managed policy
+- Search for s3 and import the s3 Full Access Policy.
+- From Bucket Policy in s3, get the arn and edit the json accordingly.
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jb-boutique-ado",
+                "arn:aws:s3:::jb-boutique-ado/*"
+                ]
+        }
+    ]
+}
+```
+- Review Policy
+- Add name and description. 
+- Create
+- Go to Groups -> Select the group -> Permissions tab -> Attach policy -> search and attach.
+
+* users
+- Add user
+- Include static files access.
+- Next: Permisssions
+- Add user to group.
+- Create user
+- ESSENTIAL: Download .csv file.
+
+* Connecting django to Amazon s3.
+
+- `pip3 install boto3`
+- `pip3 install django-storages`
+- `pip3 freeze > requirements.txt`
+- Add 'storages' to installed apps in settings.py
+
+- in settings.py:
+
+```
+if 'USE_AWS' in os.environ:
+    # Bucket Config
+    AWS_STORAGE_BUCKET_NAME = 'jb-boutique-ado'
+    AWS_S3_REGION_NAME = 'EU (London)'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+    # Static and media files
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_LOCATION = 'static'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    MEDIAFILES_LOCATION = 'media'
+
+    # Override static and media URLs in production
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+```
+
+- Add these config vars in Heroku: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, USE_AWS.
+- Delete Config Var for DISABLE_COLLECTSTATIC
+
+- create custom_storages.py in main project folder.
+```
+from django.conf import settings
+from storages.backends.s3boto3 import S3Boto3Storage
+
+
+class StaticStorage(S3Boto3Storage):
+    location = settings.STATICFILES_LOCATION
+
+
+class MediaStorage(S3Boto3Storage):
+    location = settings.MEDIAFILES_LOCATION
+```
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
