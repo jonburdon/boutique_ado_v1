@@ -2312,11 +2312,14 @@ else:
 * `pip3 freeze > requirements.txt`
 * Create `Procfile` in root folder with the contents `web: gunicorn boutique_ado.wsgi:application`
 
+* NB: Check folder for Procfile is correct
+
 * In terminal:
 - 'heroku login' or 'heroku login -i'
 - `heroku config:set DISABLE_COLLECTSTATIC=1 --app jb-boutique-ado`
 
-* In settings.py `ALLOWED_HOSTS = [jb-boutique-ado.herokuapp.com, 'localhost']`
+* In settings.py `ALLOWED_HOSTS = ['jb-boutique-ado.herokuapp.com', 'localhost']`
+* NB must be wrapped in `` above.
 
 * If the app was created on the heroku website, set the remote repo. `heroku git:remote -a jb-boutique-ado`
 
@@ -2324,6 +2327,16 @@ else:
 
 * The great moment! `git push heroku master`
 
+* To deploy to github automatically:
+- In Heroku web interface:
+- Deploy -> Github
+- Select repo and connect.
+- Enable automatic deploys
+
+* https://miniwebtool.com/django-secret-key-generator/ 
+- Add this to Heroku -> Config Vars -> Add the secret_key
+-  Update settings.py to contain it: `SECRET_KEY = os.environ.get('SECRET_KEY', '')`
+- Set `DEBUG = 'DEVELOPMENT' in os.environ` in settings.py
 
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
