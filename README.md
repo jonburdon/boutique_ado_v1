@@ -2471,6 +2471,57 @@ class MediaStorage(S3Boto3Storage):
     }
 ```
 
+- Go to s3 and create a new folder called media. Upload all product images.
+- Grant public permissions.
+
+* Tidying up
+
+- attempt to log in as admin (causes allauth to attempt to verify)
+- in django admin panel, verify email address and make primary for the super user account.
+
+* Stripe
+- Add Stripe Keys to heroku config vars.
+- Add new Stripe Webhook Endpoint. (Remember to tick viewing test data)
+- Configure endpoint as follows:
+- https://jb-boutique-ado.herokuapp.com/checkout/wh/
+- Select Receive all events.
+- Add Endpoint.
+- Add signing secret to Heroku Config Vars.
+- Should now have: STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY, STRIPE_WH_SECRET - all matched to what exists in settings.py
+- send test webhook from Stripe to check.
+
+## Email setup.
+
+* In Gmail:
+- Settings (cog)
+- Accounts and import
+- Other Google Account Settings
+- Security
+- 2 Step Verification
+- Verify
+- Turn On
+- Under Signing in to Google heading, choose app passwords.
+- Create app passwords: Type Mail / Other / enter django in the box.
+- Copy the key and enter it in the Heroku app as a config var as EMAIL_HOST_PASS
+- Create EMAIL_HOST_USER as the gmail account.
+
+* In settings.py:
+```
+if 'DEVELOPMENT' in os.environ:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'boutiqueado@example.com'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_USE_TLS = True
+    EMAIL_PORT = 587
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
+    DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
+```
+
+
+
 ## Useful Documentation:
 Django models, eg field types: https://docs.djangoproject.com/en/3.0/ref/models/fields/
 
