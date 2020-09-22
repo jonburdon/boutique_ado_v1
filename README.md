@@ -2197,7 +2197,7 @@ class CustomClearableFileInput(ClearableFileInput):
     input_text = _('')
     template_name = 'products/custom_widget_templates/custom_clearable_file_input.html'
 ```
-* In products/templates/custom_widget_templates/custom_clearable_file_input.html:
+* In products/custom_widget_templates/custom_clearable_file_input.html:
 ```
 
 {% if widget.is_initial %}
@@ -2220,6 +2220,32 @@ class CustomClearableFileInput(ClearableFileInput):
 ```
 * in forms.py `from .widgets import CustomClearableFileInput`
 * `image = forms.ImageField(label='Image', required=False, widget=CustomClearableFileInput)`
+
+* Add /* Product Form */ styling to base.css
+
+* In edit_product and add_product templates, only render a field as a crispy field if it's not our custom image widget:
+```
+{% for field in form %}
+                        {% if field.name != 'image' %}
+                            {{ field | as_crispy_field }}
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                    {% endfor %}
+```
+* Add js to notify of what the new image will be:
+```
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $('#new-image').change(function() {
+            var file = $('#new-image')[0].files[0];
+            $('#filename').text(`Image will be set to: ${file.name}`);
+        });
+    </script>
+{% endblock %}
+```
+
 
 
 ## Useful Documentation:
